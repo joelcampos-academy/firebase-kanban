@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+}
+
+.card {
+    max-width: 90%;
+    width: 25em;
+}
+
+.password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
