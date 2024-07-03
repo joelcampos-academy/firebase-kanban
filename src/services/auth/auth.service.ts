@@ -1,4 +1,9 @@
-import { type AuthError, signInWithEmailAndPassword } from "firebase/auth";
+import {
+  type AuthError,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+} from "firebase/auth";
 import { firebaseAuth } from "../../utils/firebase/setup-firebase.util";
 
 export class AuthService {
@@ -15,4 +20,18 @@ export class AuthService {
       return { error: e as AuthError };
     }
   };
+
+  static signOut = () => signOut(firebaseAuth);
+
+  static onAuthChange = ({
+    onSignIn,
+    onSignOut,
+  }: {
+    onSignIn: () => void;
+    onSignOut: () => void;
+  }) =>
+    onAuthStateChanged(firebaseAuth, (user) => {
+      if (user) onSignIn();
+      else onSignOut();
+    });
 }
