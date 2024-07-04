@@ -1,8 +1,10 @@
 import {
   type AuthError,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
 } from "firebase/auth";
 import { firebaseAuth } from "../../utils/firebase/setup-firebase.util";
@@ -33,6 +35,15 @@ export class AuthService {
         password
       );
       return { credentials };
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
+
+  static signInWithGoogle = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      return { credentials: await signInWithPopup(firebaseAuth, provider) };
     } catch (e) {
       return { error: e as AuthError };
     }
