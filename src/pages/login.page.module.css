@@ -1,7 +1,9 @@
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 2em;
 
   height: 100%;
 }
@@ -27,4 +29,15 @@
   h2 {
       text-align: center;
     }
+}
+
+.third-party {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+
+  img {
+    width: 2em;
+  }
 }

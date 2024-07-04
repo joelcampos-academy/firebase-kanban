@@ -1,9 +1,11 @@
 import { Alert, Button, Card, CardBody, Form } from "react-bootstrap";
 import { AuthService } from "../services/auth/auth.service";
 import { useEffect, useState, useTransition } from "react";
+import { AuthError } from "firebase/auth";
+
+import googleIcon from "../assets/third-party/google.png";
 
 import styles from "./login.page.module.css";
-import { AuthError } from "firebase/auth";
 
 export default function LoginPage() {
   const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -19,6 +21,16 @@ export default function LoginPage() {
               isAuthenticating={isAuthenticating}
             />
           </div>
+          <div>
+            <ThirdPartyAuthButtons
+              setIsAuthenticating={setIsAuthenticating}
+              isAuthenticating={isAuthenticating}
+            />
+          </div>
+        </CardBody>
+      </Card>
+      <Card className={styles.card}>
+        <CardBody>
           <div>
             <h2>Crear cuenta</h2>
             <CreateUserForm
@@ -147,5 +159,37 @@ const CreateUserForm = ({
         Crear usuario
       </Button>
     </Form>
+  );
+};
+
+const ThirdPartyAuthButtons = ({
+  isAuthenticating,
+  setIsAuthenticating,
+}: Readonly<FormProps>) => {
+  const [errorState, setErrorState] = useState<AuthError>();
+
+  const onSignInWithGoogle = async () => {
+    setIsAuthenticating(true);
+    const authResult = await AuthService.signInWithGoogle();
+
+    if (authResult.error) {
+      setErrorState(authResult.error);
+    }
+    setIsAuthenticating(false);
+  };
+
+  return (
+    <div>
+      {errorState && <Alert variant="danger">{errorState.message}</Alert>}
+      <div className={styles["third-party"]}>
+        <Button
+          onClick={onSignInWithGoogle}
+          variant="ghost"
+          disabled={isAuthenticating}
+        >
+          <img src={googleIcon} alt="Acceder con Google" />
+        </Button>
+      </div>
+    </div>
   );
 };
