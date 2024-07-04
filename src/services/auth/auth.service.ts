@@ -1,5 +1,6 @@
 import {
   type AuthError,
+  createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut,
@@ -16,6 +17,22 @@ export class AuthService {
       );
 
       return { credentials: authenticationResult };
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
+
+  static createUserWithEmailAndPassword = async (
+    email: string,
+    password: string
+  ) => {
+    try {
+      const credentials = await createUserWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password
+      );
+      return { credentials };
     } catch (e) {
       return { error: e as AuthError };
     }

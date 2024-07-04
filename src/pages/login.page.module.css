@@ -16,3 +16,15 @@
     flex-direction: column;
     gap: 1em;
 }
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.card {
+  h2 {
+      text-align: center;
+    }
+}
