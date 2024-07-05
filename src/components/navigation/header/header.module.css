@@ -1,0 +1,12 @@
+.brand {
+  display: flex;
+  gap: 0.25em;
+
+  img {
+    height: 1.5em;
+  }
+}
+
+.brand:hover {
+  cursor: pointer;
+}
