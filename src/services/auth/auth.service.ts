@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -50,6 +51,15 @@ export class AuthService {
   };
 
   static signOut = () => signOut(firebaseAuth);
+
+  static recoverPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(firebaseAuth, email);
+      return {};
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
 
   static onAuthChange = ({
     onSignIn,
