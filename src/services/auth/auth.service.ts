@@ -6,6 +6,7 @@ import {
   onAuthStateChanged,
   sendEmailVerification,
   sendPasswordResetEmail,
+  signInAnonymously,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -22,6 +23,16 @@ export class AuthService {
         email,
         password
       );
+
+      return { credentials: authenticationResult };
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
+
+  static anonymousSignIn = async () => {
+    try {
+      const authenticationResult = await signInAnonymously(firebaseAuth);
 
       return { credentials: authenticationResult };
     } catch (e) {
