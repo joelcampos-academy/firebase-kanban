@@ -18,6 +18,7 @@ export default function UserModal({ isVisible, onClose }: Props) {
       </Modal.Header>
       <Modal.Body>
         <UserProfilePanel />
+        <hr />
         {emailVerified ? (
           <Alert variant="success">Tu correo electrónico está verificado</Alert>
         ) : (

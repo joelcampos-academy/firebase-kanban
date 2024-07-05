@@ -1,0 +1,22 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.avatar-form {
+  display: flex;
+  gap: 1em;
+
+  * {
+    min-width: 10%;
+  }
+
+  .form-item {
+    width: 100%;
+  }
+
+  img {
+    width: 100%;
+  }
+}
