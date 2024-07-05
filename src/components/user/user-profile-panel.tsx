@@ -3,6 +3,7 @@ import { Button, Form } from "react-bootstrap";
 import { getCurrentUser } from "../../utils/auth/get-current-user.util";
 
 import styles from "./user-profile-panel.module.css";
+import { AuthService } from "../../services/auth/auth.service";
 
 export default function UserProfilePanel() {
   const user = getCurrentUser();
@@ -10,7 +11,9 @@ export default function UserProfilePanel() {
   const [name, setName] = useState<string>(user.displayName ?? "");
   const [photoURL, setPhotoURL] = useState<string>(user.photoURL ?? "");
 
-  const onUpdateProfileClick = async () => {};
+  const onUpdateProfileClick = async () => {
+    await AuthService.updateProfileData({ displayName: name, photoURL });
+  };
 
   return (
     <Form className={styles.form}>
