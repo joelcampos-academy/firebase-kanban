@@ -1,8 +1,10 @@
 import {
   type AuthError,
   createUserWithEmailAndPassword,
+  getAuth,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -55,6 +57,18 @@ export class AuthService {
   static recoverPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(firebaseAuth, email);
+      return {};
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
+
+  static verifyEmail = async () => {
+    try {
+      const user = getAuth().currentUser;
+      if (!user) throw new Error("Debes tener la sesión iniciada");
+
+      await sendEmailVerification(user);
       return {};
     } catch (e) {
       return { error: e as AuthError };
