@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { getAuth, type Auth } from "firebase/auth";
+import { connectAuthEmulator, getAuth, type Auth } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,6 +22,13 @@ export let firebaseAuth: Auth = null!;
 export const setupFirebase = () => {
   firebaseApp = initializeApp(firebaseConfig);
   firebaseAuth = getAuth(firebaseApp);
+
+  // Setup connection to emulators
+  if (import.meta.env.VITE_ENV === "development") {
+    connectAuthEmulator(firebaseAuth, "http://127.0.0.1:9099");
+  }
+
+  // All ready!
 
   console.log(
     `🔥 Firebase se ha inicializado. AppId: ${firebaseApp.options.appId}`
