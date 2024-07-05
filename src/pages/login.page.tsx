@@ -28,6 +28,9 @@ export default function LoginPage() {
               isAuthenticating={isAuthenticating}
             />
           </div>
+          <div>
+            <AnonymousSignIn />
+          </div>
         </CardBody>
       </Card>
       <Card className={styles.card}>
@@ -104,6 +107,25 @@ const EmailAndPasswordForm = ({
         Iniciar sesión
       </Button>
     </Form>
+  );
+};
+
+const AnonymousSignIn = () => {
+  const [error, setError] = useState<AuthError>();
+
+  const onAnonymousSignIn = async () => {
+    const response = await AuthService.anonymousSignIn();
+
+    setError(response.error);
+  };
+
+  return (
+    <div>
+      {error && <Alert variant="danger">{error.message}</Alert>}
+      <Button variant="secondary" className="w-100" onClick={onAnonymousSignIn}>
+        Acceder anónimamente
+      </Button>
+    </div>
   );
 };
 
