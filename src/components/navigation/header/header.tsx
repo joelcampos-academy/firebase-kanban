@@ -5,6 +5,7 @@ import logo from "../../../assets/branding/logo.png";
 import styles from "./header.module.css";
 import UserModal from "../../user/user-modal";
 import { useState } from "react";
+import { AuthService } from "../../../services/auth/auth.service";
 
 export default function Header() {
   const [isUserModalVisible, setUserModalVisible] = useState(false);
@@ -13,6 +14,7 @@ export default function Header() {
     setUserModalVisible(true);
   };
   const onBrandClick = () => {};
+  const onSignOutClick = () => AuthService.signOut();
 
   return (
     <>
@@ -26,6 +28,7 @@ export default function Header() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
               <Nav.Link onClick={onUserClick}>Usuario</Nav.Link>
+              <Nav.Link onClick={onSignOutClick}>Cerrar sesión</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
