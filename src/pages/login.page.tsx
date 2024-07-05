@@ -1,4 +1,4 @@
-import { Alert, Button, Card, CardBody, Form } from "react-bootstrap";
+import { Alert, Button, Card, CardBody, Form, Modal } from "react-bootstrap";
 import { AuthService } from "../services/auth/auth.service";
 import { useEffect, useState, useTransition } from "react";
 import { AuthError } from "firebase/auth";
@@ -20,6 +20,7 @@ export default function LoginPage() {
               setIsAuthenticating={setIsAuthenticating}
               isAuthenticating={isAuthenticating}
             />
+            <RecoverPassword />
           </div>
           <div>
             <ThirdPartyAuthButtons
@@ -191,5 +192,84 @@ const ThirdPartyAuthButtons = ({
         </Button>
       </div>
     </div>
+  );
+};
+
+const RecoverPassword = () => {
+  const [isPasswordRecoverVisible, setPasswordRecoverVisible] = useState(false);
+
+  const onRecoverClick = () => {
+    setPasswordRecoverVisible(true);
+  };
+
+  return (
+    <>
+      <div className={`${styles["recover-password"]} pt-2`}>
+        <Button variant="link" onClick={onRecoverClick}>
+          Recuperar contraseña
+        </Button>
+      </div>
+
+      <Modal
+        show={isPasswordRecoverVisible}
+        onHide={() => setPasswordRecoverVisible(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Recuperar contraseña</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <RecoverPasswordForm />
+        </Modal.Body>
+      </Modal>
+    </>
+  );
+};
+
+const RecoverPasswordForm = () => {
+  const [emailState, setEmailState] = useState<string>();
+  const [errorState, setErrorState] = useState<AuthError>();
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const [, startTransition] = useTransition();
+
+  const onRecoverClick = async () => {
+    if (emailState) {
+      const response = await AuthService.recoverPassword(emailState);
+
+      startTransition(() => {
+        setErrorState(response.error);
+        setIsSuccess(response.error === undefined);
+      });
+    }
+  };
+
+  return (
+    <>
+      {isSuccess ? (
+        <Alert>
+          Correo electrónico enviado correctamente a <b>{emailState}</b>
+        </Alert>
+      ) : (
+        <Form>
+          <Form.Group>
+            <Form.Label>Correo electrónico</Form.Label>
+            <Form.Control
+              type="email"
+              onChange={(event) => setEmailState(event.target.value)}
+            />
+          </Form.Group>
+
+          {errorState && (
+            <Alert className="mt-3" variant="danger">
+              {errorState.message}
+            </Alert>
+          )}
+
+          <Button className="mt-3 w-100" onClick={onRecoverClick}>
+            Enviar correo
+          </Button>
+        </Form>
+      )}
+    </>
   );
 };
