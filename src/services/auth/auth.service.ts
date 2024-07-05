@@ -9,6 +9,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from "firebase/auth";
 import { firebaseAuth } from "../../utils/firebase/setup-firebase.util";
 
@@ -86,4 +87,24 @@ export class AuthService {
       if (user) onSignIn();
       else onSignOut();
     });
+
+  // Profile data
+
+  static updateProfileData = async ({
+    displayName,
+    photoURL,
+  }: {
+    displayName?: string;
+    photoURL?: string;
+  }) => {
+    const user = getAuth().currentUser;
+
+    if (!user) throw new Error("Se esperaba un usuario");
+
+    try {
+      await updateProfile(user, { displayName, photoURL });
+    } catch (e) {
+      return { error: e as AuthError };
+    }
+  };
 }
