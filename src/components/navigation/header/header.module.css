@@ -1,9 +1,13 @@
 .brand {
   display: flex;
   gap: 0.25em;
+}
+
+.logo {
+  height: 1.5em;
 
   img {
-    height: 1.5em;
+    height: 100%;
   }
 }
 
