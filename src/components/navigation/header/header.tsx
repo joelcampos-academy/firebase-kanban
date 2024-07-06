@@ -1,14 +1,14 @@
 import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
-
-import logo from "../../../assets/branding/logo.png";
-import oldLogo from "../../../assets/branding/old-logo.png";
-
-import styles from "./header.module.css";
 import UserModal from "../../user/user-modal";
 import { useEffect, useState } from "react";
 import { AuthService } from "../../../services/auth/auth.service";
 import { LogoDatabaseService } from "../../../services/realtime-database/logo-database.service";
 import { getCurrentUser } from "../../../utils/auth/get-current-user.util";
+
+import logo from "../../../assets/branding/logo.png";
+import oldLogo from "../../../assets/branding/old-logo.png";
+
+import styles from "./header.module.css";
 
 export default function Header() {
   const [isUserModalVisible, setUserModalVisible] = useState(false);
@@ -19,10 +19,16 @@ export default function Header() {
     const user = getCurrentUser();
     const userId = user.uid;
 
-    // Obtenemos el código del logo de nuestro usuario
-    LogoDatabaseService.getFirebaseLogoCodeByUserId(userId).then((logoCode) => {
-      setDisplayNewLogo(logoCode === "new"); // <- Cargamos en el estado si es el nuevo logo
-    });
+    // Obtenemos el código del logo de nuestro usuario cada vez que se detecte que cambia
+    const unsubscribe = LogoDatabaseService.onFirebaseLogoCodeByUserIdChanged(
+      userId,
+      (logoCode) => {
+        setDisplayNewLogo(logoCode === "new");
+      }
+    );
+
+    // Al finalizar nos dessuscribimos
+    return () => unsubscribe();
   }, []);
 
   const onUserClick = () => {
