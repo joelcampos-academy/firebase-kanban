@@ -6,6 +6,11 @@ import {
   Database,
   getDatabase,
 } from "firebase/database";
+import {
+  connectFirestoreEmulator,
+  Firestore,
+  getFirestore,
+} from "firebase/firestore";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,6 +28,7 @@ const firebaseConfig = {
 export let firebaseApp: FirebaseApp = null!;
 export let firebaseAuth: Auth = null!;
 export let realtimeDatabase: Database = null!;
+export let firestoreDatabase: Firestore = null!;
 
 // Initialize Firebase
 export const setupFirebase = () => {
@@ -35,10 +41,14 @@ export const setupFirebase = () => {
 
   realtimeDatabase = getDatabase(firebaseApp, realtimeDatabaseUrl);
 
+  // Initialize Firestore Database
+  firestoreDatabase = getFirestore(firebaseApp);
+
   // Setup connection to emulators
   if (import.meta.env.VITE_ENV === "development") {
     connectAuthEmulator(firebaseAuth, "http://127.0.0.1:9099");
     connectDatabaseEmulator(realtimeDatabase, "127.0.0.1", 9000);
+    connectFirestoreEmulator(firestoreDatabase, "127.0.0.1", 8080);
   }
 
   // All ready!
