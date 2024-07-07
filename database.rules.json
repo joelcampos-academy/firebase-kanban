@@ -8,7 +8,8 @@
     "ratings": {
       "$uid": {
         ".read": true,
-        ".write": true
+        ".write": true,
+        ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= 3"
       }
     },
     ".read": false,
