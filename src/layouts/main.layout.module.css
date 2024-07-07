@@ -10,3 +10,10 @@
     height: 100%;
     overflow-y: scroll;
 }
+
+.rating {
+    display: flex;
+    gap: 1em;
+    flex-direction: column;
+    align-items: center;
+}
