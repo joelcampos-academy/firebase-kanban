@@ -1,4 +1,4 @@
-import { get, ref, set } from "firebase/database";
+import { get, ref, remove, set } from "firebase/database";
 import { realtimeDatabase } from "../../utils/firebase/setup-firebase.util";
 
 export class RatingDatabaseService {
@@ -22,5 +22,13 @@ export class RatingDatabaseService {
 
     // Si el valor existía lo reemplaza, si no existía lo crea
     await set(valueRef, rating);
+  };
+
+  static deleteUserRating = async (userId: string) => {
+    // Referencia al valor
+    const valueRef = ref(realtimeDatabase, `ratings/${userId}`);
+
+    // Si el valor existía lo borra, si no no hace nada
+    await remove(valueRef);
   };
 }
