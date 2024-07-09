@@ -1,10 +1,10 @@
 import { Button, Modal } from "react-bootstrap";
 import { TaskModel } from "../../models/kanban/task.model";
-
-import styles from "./kanban-column-tasks.module.css";
 import { KanbanDatabaseService } from "../../services/cloud-firestore/kanban-database.service";
 import { useState } from "react";
 import TaskUpdateForm from "./forms/task-update-form";
+
+import styles from "./kanban-column-tasks.module.css";
 
 type Props = {
   tasks: ({ id: string } & TaskModel)[];
