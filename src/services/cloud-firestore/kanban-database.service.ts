@@ -74,6 +74,9 @@ export class KanbanDatabaseService {
 
     const kanbanDocs = await getDocs(kanbanCollectionRef);
 
+    // Procesamos el array de documentos. Nos quedamos con:
+    //   - El .id     -> Es el id del documento.
+    //   - El .data() -> Es el contenido del documento.
     const processedKanbanDocs = kanbanDocs.docs.map((doc) => ({
       id: doc.id,
       ...(doc.data() as TaskModel),
