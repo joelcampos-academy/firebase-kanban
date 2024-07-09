@@ -5,6 +5,8 @@ import {
   doc,
   getDoc,
   getDocs,
+  onSnapshot,
+  updateDoc,
 } from "firebase/firestore";
 import { DepartmentModel } from "../../models/department/department.model";
 import { firestoreDatabase } from "../../utils/firebase/setup-firebase.util";
@@ -18,6 +20,10 @@ export class KanbanDatabaseService {
    */
   private static getDepartmentsCollectionRef = () => {
     return collection(firestoreDatabase, "departments");
+  };
+
+  private static getDepartmentKanbanCollectionRef = (departmentId: string) => {
+    return collection(firestoreDatabase, "departments", departmentId, "kanban");
   };
 
   /**
@@ -65,13 +71,10 @@ export class KanbanDatabaseService {
    * Se obtienen de la ruta '/departments/{departmentId}/kanban
    */
   static getDepartmentTasks = async (departmentId: string) => {
-    const kanbanCollectionRef = collection(
-      firestoreDatabase,
-      "departments",
-      departmentId,
-      "kanban"
-    );
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
 
+    // Leemos los documentos de la DB
     const kanbanDocs = await getDocs(kanbanCollectionRef);
 
     // Procesamos el array de documentos. Nos quedamos con:
@@ -82,5 +85,81 @@ export class KanbanDatabaseService {
       ...(doc.data() as TaskModel),
     }));
     return processedKanbanDocs;
+  };
+
+  /**
+   * Esta función escucha los cambios que se producen en el kanban de un departamento.
+   * Se obtienen de la ruta '/departments/{departmentId}/kanban
+   * Cuando se detecta un cambio se llama a la función que se pasa por parámetro.
+   */
+  static omDepartmentTasksChange = (
+    departmentId: string,
+    onChange: (tasks: ({ id: string } & TaskModel)[]) => void
+  ) => {
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
+
+    return onSnapshot(kanbanCollectionRef, (snapshot) => {
+      // Procesamos el array de documentos. Nos quedamos con:
+      //   - El .id     -> Es el id del documento.
+      //   - El .data() -> Es el contenido del documento.
+      const processedKanbanDocs = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as TaskModel),
+      }));
+
+      onChange(processedKanbanDocs);
+    });
+  };
+
+  /**
+   * Esta función elimina un documento de la colección 'kanban' situada dentro de un departamento.
+   * Se le proporciona el id de departamento y el id de tarea. A partir de estos datos se genera la ruta
+   * al documento que se va a eliminar: 'departments/{departmentId}/kanban/{taskId}'
+   */
+  static removeDepartmentTask = async (
+    departmentId: string,
+    taskId: string
+  ) => {
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
+
+    // Eliminamos el documento de la DB
+    await deleteDoc(doc(kanbanCollectionRef, taskId));
+  };
+
+  /**
+   * Esta función actualiza un documento de la colección 'kanban' situada dentro de un departamento.
+   * Se le proporciona el id de departamento y el id de tarea. A partir de estos datos se genera la ruta
+   * al documento que se va a actualizar: 'departments/{departmentId}/kanban/{taskId}'.
+   * Finalmente se le proporciona un parámetro con los nuevos datos del documento (taskData).
+   */
+  static updateDepartmentTask = async (
+    departmentId: string,
+    taskId: string,
+    taskData: TaskModel
+  ) => {
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
+
+    // Actualizamos el documento de la DB
+    await updateDoc(doc(kanbanCollectionRef, taskId), { ...taskData });
+  };
+
+  /**
+   * Esta función crea un documento de la colección 'kanban' situada dentro de un departamento.
+   * Se le proporciona el id de departamento: 'departments/{departmentId}/kanban'. Al nuevo documento se le asignará
+   * un id automáticamente.
+   * Finalmente se le proporciona un parámetro con los datos del documento (taskData).
+   */
+  static createDepartmentTask = async (
+    departmentId: string,
+    taskData: TaskModel
+  ) => {
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
+
+    // Creamos el documento de la DB
+    return await addDoc(kanbanCollectionRef, { ...taskData });
   };
 }

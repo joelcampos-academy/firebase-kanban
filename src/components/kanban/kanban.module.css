@@ -2,7 +2,6 @@
     display: flex;
     gap: 0.5em;
     width: 100%;
-    padding: 0 1em 0 1em;
 }
 
 .column {
@@ -32,4 +31,12 @@
     .kanban {
         flex-direction: column;
     }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+
+    padding: 0 1em 0 1em;
 }

@@ -22,7 +22,6 @@ export default function KanbanColumnTasks({ tasks }: Props) {
             </div>
           </div>
           <p>{task.description}</p>
-          <small>{task.assignedTo}</small>
         </div>
       ))}
     </div>
