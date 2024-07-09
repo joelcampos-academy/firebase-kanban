@@ -1,0 +1,32 @@
+.tasks {
+    display: flex;
+    flex-direction: column;
+}
+
+.empty {
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: gray;
+}
+
+.item {
+    margin: 1em;
+    padding: 1.15em;
+    background-color: lightgray;
+    border-radius: 8px;
+
+    .header {
+        display: flex;
+        gap: 0.5em;
+        justify-content: space-between;
+
+        h4 {
+            font-weight: bold;
+        }
+    }
+}

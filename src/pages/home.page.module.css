@@ -1,0 +1,15 @@
+.rating, .container {
+  display: flex;
+  gap: 1em;
+  flex-direction: column;
+  align-items: center;
+}
+
+.kanban {
+  max-width: 100%;
+  width: 100em;
+}
+
+.container {
+  gap: 2em;
+}
