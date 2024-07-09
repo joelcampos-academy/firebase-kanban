@@ -12,7 +12,7 @@ import { TaskModel } from "../../models/kanban/task.model";
 
 export class KanbanDatabaseService {
   /**
-   * Esta función devuelve la referencia a la colección 'kanban'.
+   * Esta función devuelve la referencia a la colección 'departments'.
    * Al obtener una referencia no se realiza ninguna lectura a la DB.
    * Podemos entender una referencia como una ruta que luego utilizaremos para leer o escribir en la DB.
    */
@@ -21,8 +21,8 @@ export class KanbanDatabaseService {
   };
 
   /**
-   * Esta función crea un nuevo documento dentro de la colección kanban ('/kanban').
-   * Ejemplo: '/kanban/1234' siendo 1234 el ID del nuevo documento.
+   * Esta función crea un nuevo documento dentro de la colección kanban ('/departments').
+   * Ejemplo: '/departments/1234' siendo 1234 el ID del nuevo documento.
    * En el documento se almacenan los datos que se han pasado en 'departmentInfo'.
    */
   static createDepartment = async (departmentInfo: DepartmentModel) => {
@@ -33,7 +33,7 @@ export class KanbanDatabaseService {
 
   /**
    * Esta función lee un departamento a partir del id de documento.
-   * Primero obtenemos la referencia de la colección 'kanban'.
+   * Primero obtenemos la referencia de la colección 'departments'.
    */
   static getDepartment = async (departmentId: string) => {
     const departmentCollection = this.getDepartmentsCollectionRef();
@@ -43,7 +43,7 @@ export class KanbanDatabaseService {
   };
 
   /**
-   * Esta función lee todos los departamentos que hay dentro de la colección 'kanban'.
+   * Esta función lee todos los departamentos que hay dentro de la colección 'departments'.
    */
   static getDepartments = async () => {
     const departmentCollection = this.getDepartmentsCollectionRef();
@@ -60,6 +60,10 @@ export class KanbanDatabaseService {
     await deleteDoc(doc(kanbanCollection, departmentId));
   };
 
+  /**
+   * Esta función nos devuelve todas las tareas que formen parte del kanban de un departamento.
+   * Se obtienen de la ruta '/departments/{departmentId}/kanban
+   */
   static getDepartmentTasks = async (departmentId: string) => {
     const kanbanCollectionRef = collection(
       firestoreDatabase,
