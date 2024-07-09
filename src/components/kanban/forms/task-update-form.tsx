@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { TaskState } from "../../../models/kanban/task-state.enum";
 import { KanbanDatabaseService } from "../../../services/cloud-firestore/kanban-database.service";
+import { TaskModel } from "../../../models/kanban/task.model";
 
-import styles from "./task-create-form.module.css";
+import styles from "./task-update-form.module.css";
 
 const TASK_STATES_I18n: Record<TaskState, string> = {
   [TaskState.DONE]: "Hecha",
@@ -13,20 +14,21 @@ const TASK_STATES_I18n: Record<TaskState, string> = {
 
 type Props = {
   departmentId: string;
+  task: { id: string } & TaskModel;
   close: () => void;
 };
 
-export default function TaskCreateForm({ departmentId, close }: Props) {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [taskState, setTaskState] = useState<TaskState>(TaskState.TODO);
+export default function TaskUpdateForm({ departmentId, close, task }: Props) {
+  const [title, setTitle] = useState<string>(task.title);
+  const [description, setDescription] = useState<string>(task.description);
+  const [taskState, setTaskState] = useState<TaskState>(task.state);
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const onCreateClick = async () => {
+  const onUpdateClick = async () => {
     setIsLoading(true);
 
-    KanbanDatabaseService.createDepartmentTask(departmentId, {
+    KanbanDatabaseService.updateDepartmentTask(departmentId, task.id, {
       title,
       description,
       state: taskState,
@@ -71,8 +73,8 @@ export default function TaskCreateForm({ departmentId, close }: Props) {
           ))}
         </Form.Select>
       </Form.Group>
-      <Button disabled={isLoading} onClick={onCreateClick} className="w-100">
-        Crear tarea
+      <Button disabled={isLoading} onClick={onUpdateClick} className="w-100">
+        Actualizar tarea
       </Button>
     </Form>
   );
