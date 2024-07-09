@@ -58,6 +58,24 @@ export class KanbanDatabaseService {
   };
 
   /**
+   * Esta función lee todos los departamentos que hay dentro de la colección 'departments'.
+   */
+  static onDepartmentsChange = async (
+    onChange: (departments: ({ id: string } & DepartmentModel)[]) => void
+  ) => {
+    const departmentCollection = this.getDepartmentsCollectionRef();
+
+    return onSnapshot(departmentCollection, (snapshot) => {
+      const processedDepartments = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as DepartmentModel),
+      }));
+
+      onChange(processedDepartments);
+    });
+  };
+
+  /**
    * Esta función elimina el documento de un departamento por id.
    */
   static removeDepartment = async (departmentId: string) => {
