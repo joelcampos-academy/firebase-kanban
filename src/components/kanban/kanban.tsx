@@ -48,7 +48,10 @@ export default function Kanban({ departmentId }: Props) {
               <h3>Por hacer 📦</h3>
             </div>
             <div className={styles.content}>
-              <KanbanColumnTasks tasks={groupedTasks[TaskState.TODO]} />
+              <KanbanColumnTasks
+                departmentId={departmentId}
+                tasks={groupedTasks[TaskState.TODO]}
+              />
             </div>
           </div>
           <div className={styles.column}>
@@ -56,7 +59,10 @@ export default function Kanban({ departmentId }: Props) {
               <h3>En proceso ⚙️</h3>
             </div>
             <div className={styles.content}>
-              <KanbanColumnTasks tasks={groupedTasks[TaskState.WIP]} />
+              <KanbanColumnTasks
+                departmentId={departmentId}
+                tasks={groupedTasks[TaskState.WIP]}
+              />
             </div>
           </div>
           <div className={styles.column}>
@@ -64,7 +70,10 @@ export default function Kanban({ departmentId }: Props) {
               <h3>Terminadas ✅</h3>
             </div>
             <div className={styles.content}>
-              <KanbanColumnTasks tasks={groupedTasks[TaskState.DONE]} />
+              <KanbanColumnTasks
+                departmentId={departmentId}
+                tasks={groupedTasks[TaskState.DONE]}
+              />
             </div>
           </div>
         </div>
