@@ -6,6 +6,7 @@ import KanbanColumnTasks from "./kanban-column-tasks";
 import { KanbanDatabaseService } from "../../services/cloud-firestore/kanban-database.service";
 import { Button, Modal } from "react-bootstrap";
 import TaskCreateForm from "./forms/task-create-form";
+import LatestTasks from "./latest-tasks";
 
 import styles from "./kanban.module.css";
 
@@ -18,7 +19,7 @@ export default function Kanban({ departmentId }: Props) {
   const [tasks, setTasks] = useState<({ id: string } & TaskModel)[]>([]);
 
   useEffect(() => {
-    const unsubscribe = KanbanDatabaseService.omDepartmentTasksChange(
+    const unsubscribe = KanbanDatabaseService.onDepartmentTasksChange(
       departmentId,
       (tasks) => setTasks(tasks)
     );
@@ -37,6 +38,8 @@ export default function Kanban({ departmentId }: Props) {
   return (
     <>
       <div className={styles.container}>
+        <LatestTasks departmentId={departmentId} />
+        <hr />
         <div>
           <Button onClick={() => setCreateModalOpenState(true)}>
             Crear tarea

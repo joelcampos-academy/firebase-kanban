@@ -7,10 +7,15 @@ import {
   getDocs,
   onSnapshot,
   updateDoc,
+  where,
+  query,
+  limit,
+  orderBy,
 } from "firebase/firestore";
 import { DepartmentModel } from "../../models/department/department.model";
 import { firestoreDatabase } from "../../utils/firebase/setup-firebase.util";
 import { TaskModel } from "../../models/kanban/task.model";
+import { TaskState } from "../../models/kanban/task-state.enum";
 
 export class KanbanDatabaseService {
   /**
@@ -110,7 +115,7 @@ export class KanbanDatabaseService {
    * Se obtienen de la ruta '/departments/{departmentId}/kanban
    * Cuando se detecta un cambio se llama a la función que se pasa por parámetro.
    */
-  static omDepartmentTasksChange = (
+  static onDepartmentTasksChange = (
     departmentId: string,
     onChange: (tasks: ({ id: string } & TaskModel)[]) => void
   ) => {
@@ -155,7 +160,7 @@ export class KanbanDatabaseService {
   static updateDepartmentTask = async (
     departmentId: string,
     taskId: string,
-    taskData: TaskModel
+    taskData: Partial<TaskModel>
   ) => {
     const kanbanCollectionRef =
       this.getDepartmentKanbanCollectionRef(departmentId);
@@ -179,5 +184,29 @@ export class KanbanDatabaseService {
 
     // Creamos el documento de la DB
     return await addDoc(kanbanCollectionRef, { ...taskData });
+  };
+
+  /**
+   * Esta función devuelve todas las tareas que están en estado WIP (en progreso) de un departamento.
+   */
+  static getLatestInProgressDepartmentTasks = async (departmentId: string) => {
+    const kanbanCollectionRef =
+      this.getDepartmentKanbanCollectionRef(departmentId);
+
+    // Generamos la query:
+    const q = query(
+      kanbanCollectionRef,
+      where("state", "==", TaskState.WIP), // <-- Seleccionamos solo los que estén en estado WIP
+      orderBy("createdAt", "desc"), // <-- Ordenamos descendentemente por fecha de creación
+      limit(5) // <-- Seleccionamos como máximo 5 tareas
+    );
+
+    // Obtenemos los datos de la DB
+    const docs = await getDocs(q);
+
+    return docs.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as TaskModel),
+    }));
   };
 }

@@ -30,6 +30,7 @@ export default function TaskCreateForm({ departmentId, close }: Props) {
       title,
       description,
       state: taskState,
+      createdAt: new Date(),
     })
       .then(() => {
         close();
