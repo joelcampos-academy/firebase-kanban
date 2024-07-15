@@ -13,3 +13,10 @@
 .container {
   gap: 2em;
 }
+
+.select-department {
+  display: flex;
+  gap: 2em;
+
+  align-items: center;
+}

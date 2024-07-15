@@ -1,20 +1,24 @@
 import { useState } from "react";
 import Kanban from "../components/kanban/kanban";
 import Rating from "../components/rating/rating";
+import SelectDepartment from "../components/department/select-department";
+import EditDepartmentPicture from "../components/department/forms/edit-department-picture";
 
 import styles from "./home.page.module.css";
-import SelectDepartment from "../components/department/select-department";
 
 export default function HomePage() {
   const [departmentId, setDepartmentId] = useState<string>();
 
   return (
     <div className={styles.container}>
-      <div>
-        <SelectDepartment
-          departmentId={departmentId}
-          onSelect={setDepartmentId}
-        />
+      <div className={styles["select-department"]}>
+        {departmentId && <EditDepartmentPicture departmentId={departmentId} />}
+        <div>
+          <SelectDepartment
+            departmentId={departmentId}
+            onSelect={setDepartmentId}
+          />
+        </div>
       </div>
       {departmentId && (
         <div className={styles.kanban}>

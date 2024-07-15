@@ -1,0 +1,14 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+.file {
+    max-width: 10em;
+}
+
+.picture {
+    height: 10em;
+    width: 10em;
+}
