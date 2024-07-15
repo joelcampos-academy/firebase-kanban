@@ -11,6 +11,7 @@ import {
   Firestore,
   getFirestore,
 } from "firebase/firestore";
+import { FirebaseStorage, getStorage } from "firebase/storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -29,6 +30,7 @@ export let firebaseApp: FirebaseApp = null!;
 export let firebaseAuth: Auth = null!;
 export let realtimeDatabase: Database = null!;
 export let firestoreDatabase: Firestore = null!;
+export let firebaseStorage: FirebaseStorage = null!;
 
 // Initialize Firebase
 export const setupFirebase = () => {
@@ -43,6 +45,9 @@ export const setupFirebase = () => {
 
   // Initialize Firestore Database
   firestoreDatabase = getFirestore(firebaseApp);
+
+  // Initialize Storage (files)
+  firebaseStorage = getStorage(firebaseApp);
 
   // Setup connection to emulators
   if (import.meta.env.VITE_ENV === "development") {
