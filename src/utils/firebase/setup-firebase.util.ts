@@ -58,7 +58,7 @@ export const setupFirebase = () => {
     connectAuthEmulator(firebaseAuth, "http://127.0.0.1:9099");
     connectDatabaseEmulator(realtimeDatabase, "127.0.0.1", 9000);
     connectFirestoreEmulator(firestoreDatabase, "127.0.0.1", 8080);
-    connectStorageEmulator(firebaseStorage, "127.0.0.1", 4000);
+    connectStorageEmulator(firebaseStorage, "127.0.0.1", 9199);
   }
 
   // All ready!
