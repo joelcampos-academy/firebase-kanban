@@ -26,6 +26,10 @@ export default function EditDepartmentPicture({ departmentId }: Props) {
     );
   };
 
+  const downloadPicture = () => {
+    StorageService.downloadDepartmentImage(departmentId);
+  };
+
   useEffect(() => {
     fetchPicture(departmentId);
   }, [departmentId]);
@@ -36,6 +40,7 @@ export default function EditDepartmentPicture({ departmentId }: Props) {
         src={pictureUrl || undefined}
         className={styles.picture}
         alt="Department picture"
+        onClick={downloadPicture}
       />
       <Form className={styles.file}>
         <Form.Group>
